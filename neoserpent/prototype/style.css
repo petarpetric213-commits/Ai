@@ -1,0 +1,182 @@
+/* =============================================================================
+   NEOSERPENT — UI stil (meni, overlay-i, touch kontrole, FX slojevi)
+   ========================================================================== */
+
+:root {
+  --cyan: #38e8ff;
+  --magenta: #ff3ad6;
+  --panel: rgba(7, 10, 22, 0.72);
+  --border: rgba(90, 140, 255, 0.28);
+  --text: #dceaff;
+  --text-dim: rgba(150, 180, 230, 0.7);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #04050d;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  -webkit-user-select: none; user-select: none;
+  touch-action: none;
+}
+
+#game { position: fixed; inset: 0; display: block; cursor: crosshair; }
+
+/* ---------- FX slojevi (besplatni za canvas — čisti CSS) ---------- */
+#fx-vignette {
+  position: fixed; inset: 0; pointer-events: none; z-index: 5;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(2, 3, 10, 0.55) 100%);
+}
+#fx-scanlines {
+  position: fixed; inset: 0; pointer-events: none; z-index: 6;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px);
+  mix-blend-mode: overlay;
+}
+
+#ui { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.hidden { display: none !important; }
+
+/* ---------- overlay-i ---------- */
+.overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 5, 12, 0.45);
+  backdrop-filter: blur(6px) saturate(1.2);
+  pointer-events: auto;
+  animation: fadeIn 0.35s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.menu-card {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  padding: 44px 54px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 0 60px rgba(56, 232, 255, 0.08), inset 0 0 40px rgba(56, 232, 255, 0.03);
+  animation: cardIn 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  max-width: min(92vw, 520px);
+}
+@keyframes cardIn { from { transform: translateY(24px) scale(0.97); opacity: 0; } }
+
+.title {
+  font-size: clamp(38px, 7vw, 62px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  background: linear-gradient(92deg, var(--cyan) 30%, var(--magenta) 75%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  filter: drop-shadow(0 0 18px rgba(56, 232, 255, 0.45));
+  animation: titlePulse 3s ease-in-out infinite;
+}
+.title span { filter: drop-shadow(0 0 22px rgba(255, 58, 214, 0.5)); }
+@keyframes titlePulse {
+  0%, 100% { filter: drop-shadow(0 0 14px rgba(56, 232, 255, 0.35)); }
+  50% { filter: drop-shadow(0 0 26px rgba(56, 232, 255, 0.65)); }
+}
+
+.tagline {
+  font-size: 12px; letter-spacing: 0.55em; text-indent: 0.55em;
+  color: var(--text-dim); font-weight: 600;
+}
+
+.join-row { display: flex; gap: 10px; width: 100%; }
+
+#nameInput {
+  flex: 1; min-width: 0;
+  padding: 13px 16px;
+  background: rgba(3, 5, 12, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font: 700 14px ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#nameInput:focus { border-color: var(--cyan); box-shadow: 0 0 16px rgba(56, 232, 255, 0.25); }
+#nameInput::placeholder { color: rgba(120, 150, 200, 0.4); font-weight: 500; }
+
+button {
+  padding: 13px 22px;
+  background: linear-gradient(135deg, rgba(56, 232, 255, 0.16), rgba(255, 58, 214, 0.16));
+  border: 1px solid var(--cyan);
+  border-radius: 10px;
+  color: var(--cyan);
+  font: 800 13px 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+button:hover { transform: translateY(-1px); box-shadow: 0 0 22px rgba(56, 232, 255, 0.35); background: linear-gradient(135deg, rgba(56,232,255,0.28), rgba(255,58,214,0.28)); }
+button:active { transform: translateY(1px); }
+
+.controls-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px;
+  margin-top: 6px;
+}
+.ctl { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-dim); }
+.ctl span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+kbd {
+  padding: 3px 8px;
+  background: rgba(56, 232, 255, 0.08);
+  border: 1px solid rgba(56, 232, 255, 0.35);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  font: 700 10px ui-monospace, monospace;
+  color: var(--cyan);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.hint { font-size: 11px; color: rgba(120, 150, 200, 0.55); text-align: center; max-width: 400px; line-height: 1.5; }
+
+/* ---------- ekran smrti ---------- */
+.death-card { border-color: rgba(255, 60, 100, 0.35); box-shadow: 0 0 60px rgba(255, 60, 100, 0.12), inset 0 0 40px rgba(255,60,100,0.04); }
+.death-title {
+  font-size: 42px; font-weight: 900; letter-spacing: 0.18em;
+  color: #ff4d6d;
+  text-shadow: 0 0 24px rgba(255, 60, 100, 0.6);
+}
+.death-cause { color: var(--text-dim); font-size: 14px; }
+.death-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 34px; margin: 8px 0 4px; }
+.death-stats div { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.death-stats span { font-size: 10px; letter-spacing: 0.2em; color: var(--text-dim); }
+.death-stats b { font: 700 22px ui-monospace, monospace; color: #fff; }
+#respawnBtn { border-color: #ff4d6d; color: #ff8fa3; animation: respawnPulse 1.6s ease-in-out infinite; }
+#respawnBtn:hover { box-shadow: 0 0 22px rgba(255, 77, 109, 0.4); background: linear-gradient(135deg, rgba(255,77,109,0.25), rgba(255,58,214,0.2)); }
+@keyframes respawnPulse { 0%,100% { box-shadow: 0 0 8px rgba(255,77,109,0.2); } 50% { box-shadow: 0 0 24px rgba(255,77,109,0.45); } }
+
+/* ---------- touch kontrole ---------- */
+#touchControls {
+  position: absolute; right: 14px; bottom: 14px;
+  pointer-events: auto;
+}
+.touch-cluster { display: grid; grid-template-columns: auto auto; gap: 10px; justify-items: end; }
+.tbtn {
+  border-radius: 50%;
+  border-width: 2px;
+  font-size: 11px;
+  padding: 0;
+  touch-action: none;
+}
+.tbtn.small { width: 62px; height: 62px; }
+.tbtn.big {
+  width: 84px; height: 84px;
+  grid-column: 2;
+  font-size: 13px;
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+.tbtn:active { transform: scale(0.94); }
+
+@media (max-width: 560px) {
+  .menu-card { padding: 30px 22px; }
+  .controls-grid { grid-template-columns: 1fr; }
+}

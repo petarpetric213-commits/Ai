@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEOSERPENT — Next-Gen Slither Arena</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="fx-vignette"></div>
+  <div id="fx-scanlines"></div>
+
+  <div id="ui">
+    <!-- ================= GLAVNI MENI ================= -->
+    <div id="menu" class="overlay">
+      <div class="menu-card">
+        <h1 class="title">NEO<span>SERPENT</span></h1>
+        <p class="tagline">NEXT-GEN SLITHER ARENA</p>
+
+        <div class="join-row">
+          <input id="nameInput" maxlength="12" placeholder="IME PILOTA" autocomplete="off" spellcheck="false">
+          <button id="playBtn">UĐI U ARENU</button>
+        </div>
+
+        <div class="controls-grid">
+          <div class="ctl"><kbd>MIŠ</kbd><span>upravljanje zmijom</span></div>
+          <div class="ctl"><kbd>LMB / SPACE</kbd><span>boost — troši masu</span></div>
+          <div class="ctl"><kbd>SHIFT</kbd><span>dash skok</span></div>
+          <div class="ctl"><kbd>E</kbd><span>magnet štit</span></div>
+          <div class="ctl"><kbd>Q</kbd><span>EMP talas</span></div>
+          <div class="ctl"><kbd>M</kbd><span>zvuk on/off</span></div>
+        </div>
+
+        <p class="hint">Savet: mega-orbovi (⬤) donose ×3 mase ali beže. Presretaj veće zmije EMP-om.</p>
+      </div>
+    </div>
+
+    <!-- ================= EKRAN SMRTI ================= -->
+    <div id="death" class="overlay hidden">
+      <div class="menu-card death-card">
+        <h2 class="death-title">ELIMINISAN</h2>
+        <p id="deathCause" class="death-cause"></p>
+        <div id="deathStats" class="death-stats"></div>
+        <button id="respawnBtn">RESPAWN&nbsp;&nbsp;[SPACE]</button>
+      </div>
+    </div>
+
+    <!-- ================= TOUCH KONTROLE ================= -->
+    <div id="touchControls" class="hidden">
+      <div class="touch-cluster">
+        <button id="empBtn" class="tbtn small">EMP</button>
+        <button id="magnetBtn" class="tbtn small">MAG</button>
+        <button id="dashBtn" class="tbtn small">DASH</button>
+        <button id="boostBtn" class="tbtn big">BOOST</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
